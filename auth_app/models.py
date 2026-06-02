@@ -55,4 +55,5 @@ class UserProfile(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
+        """Returns username and type as string representation."""
         return f"{self.user.username} - {self.user.type}"
