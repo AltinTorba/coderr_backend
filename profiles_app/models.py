@@ -1,4 +1,7 @@
+# Third-party imports
 from django.db import models
+
+# Local
 from auth_app.models import CustomUser
 
 class UserProfile(models.Model):

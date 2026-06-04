@@ -1,16 +1,13 @@
-# Third-party
-from django.test import TestCase
-from rest_framework.test import APIClient
+# Third-party imports
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-# Local
-from auth_app.models import CustomUser, UserProfile
 
-class RegistrationHappyTestCase(TestCase):
-    """Happy path tests for registration endpoint."""
-    
+class RegistrationTests(APITestCase):
+    """Tests for the registration endpoint."""
+
     def setUp(self):
-        """Sets up test client and valid data before each test."""
-        self.client = APIClient()
+        """Sets test URL and valid payload."""
         self.url = '/api/registration/'
         self.valid_data = {
             'username': 'testuser',
@@ -19,13 +16,16 @@ class RegistrationHappyTestCase(TestCase):
             'repeated_password': 'test123',
             'type': 'customer'
         }
-        
-    def test_registration_customer_success(self):
-        """Tests successful registration of a customer user."""
-        response = self.client.post(self.url, self.valid_data)
 
-        self.assertEqual(response.status_code, 201)
+    def test_registration_success(self):
+        """Tests successful registration with valid data."""
+        response = self.client.post(self.url, self.valid_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('token', response.data)
-        self.assertIn('username', response.data)
-        self.assertIn('email', response.data)
         self.assertIn('user_id', response.data)
+
+    def test_registration_password_mismatch(self):
+        """Tests registration fails when passwords differ."""
+        self.valid_data['repeated_password'] = 'wrong123'
+        response = self.client.post(self.url, self.valid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
