@@ -5,13 +5,12 @@ from django.db import models
 from auth_app.models import CustomUser
 
 class UserProfile(models.Model):
+    """Extended profile for each user."""
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
         related_name='profile'
     )
-    first_name = models.CharField(max_length=100, blank=True, default='')
-    last_name = models.CharField(max_length=100, blank=True, default='')
     file = models.ImageField(
         upload_to='profiles/',
         blank=True,

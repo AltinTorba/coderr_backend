@@ -23,8 +23,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        """Creates a new user with hashed password."""
+        """Creates new user with hashed password and blank profile."""
         validated_data.pop('repeated_password')
         user = CustomUser.objects.create_user(**validated_data)
         UserProfile.objects.create(user=user)
         return user
+    
+class LoginSerializer(serializers.Serializer):
+    """Serializer for user login."""
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
