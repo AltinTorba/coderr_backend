@@ -36,6 +36,10 @@ class ProfileRetrieveTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], self.user.username)
         self.assertEqual(response.data['location'], 'Berlin')
+        self.assertIn('first_name', response.data)
+        self.assertIn('last_name', response.data)
+        self.assertIn('file', response.data)
+        self.assertIn('email', response.data)
 
     def test_profile_retrieve_unauthenticated(self):
         """Test profile retrieval fails without authentication."""
@@ -114,6 +118,9 @@ class BusinessProfileListTests(APITestCase):
         self.assertIsInstance(response.data, list)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'business')
+        self.assertIn('first_name', response.data[0])
+        self.assertIn('last_name', response.data[0])
+        self.assertIn('file', response.data[0])
 
     def test_business_list_unauthenticated(self):
         """Test business list fails without authentication."""
@@ -145,9 +152,33 @@ class CustomerProfileListTests(APITestCase):
         self.assertIsInstance(response.data, list)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'customer')
+        self.assertIn('first_name', response.data[0])
+        self.assertIn('last_name', response.data[0])
+        self.assertIn('file', response.data[0])
 
     def test_customer_list_unauthenticated(self):
         """Test customer list fails without authentication."""
         self.client.credentials()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+
+class ProfileAutoCreateTests(APITestCase):
+    """Tests that UserProfile is created automatically on registration."""
+
+    def test_profile_created_on_registration(self):
+        """Test UserProfile exists after API registration."""
+        data = {
+            'username': 'newuser',
+            'email': 'newuser@test.com',
+            'password': 'test123',
+            'repeated_password': 'test123',
+            'type': 'customer'
+        }
+        self.client.post('/api/registration/', data)
+
+        self.assertTrue(
+            UserProfile.objects.filter(
+                user__username='newuser'
+            ).exists()
+        )

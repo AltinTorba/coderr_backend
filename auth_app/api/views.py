@@ -16,11 +16,14 @@ class RegistrationView(APIView):
 
     def post(self, request):
         """Processes the POST request to register a user."""
+        # from profiles_app.models import UserProfile
         serializer = RegistrationSerializer(data=request.data)
         
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
+            
+            # UserProfile.objects.create(user=user)
             
             return Response({
                 "token": token.key,

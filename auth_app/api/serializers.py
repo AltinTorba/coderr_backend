@@ -5,6 +5,7 @@ from rest_framework import serializers
 from auth_app.models import CustomUser
 from profiles_app.models import UserProfile
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
     repeated_password = serializers.CharField(write_only=True)
