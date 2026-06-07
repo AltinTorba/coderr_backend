@@ -1,12 +1,6 @@
-# Standard library
-# import json
-
 # Third-party imports
 from django.conf import settings
 from django.db import models
-
-# Local
-# from auth_app.models import CustomUser
 
 class Offer(models.Model):
     """Model representing a service offer created by a business user."""
