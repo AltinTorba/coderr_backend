@@ -27,7 +27,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         """Creates new user with hashed password and blank profile."""
         validated_data.pop('repeated_password')
         user = CustomUser.objects.create_user(**validated_data)
-        UserProfile.objects.create(user=user)
+        UserProfile.objects.get_or_create(user=user)
         return user
     
 class LoginSerializer(serializers.Serializer):
