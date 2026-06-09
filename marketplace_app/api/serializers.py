@@ -1,9 +1,10 @@
 # Third-party imports
 from django.db.models import Min
 from rest_framework import serializers
+from rest_framework.exceptions import NotFound
 
 # Local imports
-from marketplace_app.models import Offer, OfferDetail
+from marketplace_app.models import Offer, OfferDetail, Order
 
 
 class OfferDetailSerializer(serializers.ModelSerializer):
@@ -64,17 +65,18 @@ class OfferDetailUrlSerializer(serializers.ModelSerializer):
 
 
 class OfferMinValuesMixin:
-    """Mixin that provides min_price and min_delivery_time methods."""
+    """
+    Mixin that reads min_price and min_delivery_time
+    from annotated queryset fields - zero extra queries.
+    """
 
     def get_min_price(self, obj):
-        """Returns the minimum price from offer details."""
-        return obj.details.aggregate(Min('price'))['price__min']
+        """Returns min_price from annotated field."""
+        return getattr(obj, 'min_price', None)
 
     def get_min_delivery_time(self, obj):
-        """Returns the minimum delivery time from offer details."""
-        return obj.details.aggregate(
-            Min('delivery_time_in_days')
-        )['delivery_time_in_days__min']
+        """Returns min_delivery_time from annotated field."""
+        return getattr(obj, 'min_delivery_time', None)
 
 
 class OfferSerializer(serializers.ModelSerializer):
@@ -201,3 +203,88 @@ class OfferRetrieveSerializer(OfferMinValuesMixin, serializers.ModelSerializer):
             'min_price',
             'min_delivery_time'
         ]
+
+
+class OrderCreateSerializer(serializers.Serializer):
+    """Serializer for creating an order from an offer detail."""
+    offer_detail_id = serializers.IntegerField()
+
+    def validate_offer_detail_id(self, value):
+        """Validates offer_detail_id exists and caches the object."""
+        try:
+            self._offer_detail = OfferDetail.objects.select_related(
+                'offer__user'
+            ).get(id=value)
+        except OfferDetail.DoesNotExist:
+            raise NotFound("Offer detail not found.")
+        return value
+
+    def create(self, validated_data):
+        """Creates order as snapshot from cached offer detail."""
+        offer_detail = self._offer_detail
+        request = self.context.get('request')
+        return Order.objects.create(
+            customer_user=request.user,
+            business_user=offer_detail.offer.user,
+            title=offer_detail.title,
+            revisions=offer_detail.revisions,
+            delivery_time_in_days=offer_detail.delivery_time_in_days,
+            price=offer_detail.price,
+            features=offer_detail.features,
+            offer_type=offer_detail.offer_type,
+            status=Order.IN_PROGRESS
+        )
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """Serializer for reading order details."""
+
+    class Meta:
+        model = Order
+        fields = [
+            'id',
+            'customer_user',
+            'business_user',
+            'title',
+            'revisions',
+            'delivery_time_in_days',
+            'price',
+            'features',
+            'offer_type',
+            'status',
+            'created_at',
+            'updated_at'
+        ]
+        read_only_fields = [
+            'customer_user',
+            'business_user',
+            'title',
+            'revisions',
+            'delivery_time_in_days',
+            'price',
+            'features',
+            'offer_type',
+            'created_at',
+            'updated_at'
+        ]
+
+
+class OrderStatusSerializer(serializers.ModelSerializer):
+    """Serializer for updating order status only."""
+
+    class Meta:
+        model = Order
+        fields = ['id', 'status']
+
+    def validate_status(self, value):
+        """Validates that status is a valid choice."""
+        valid_statuses = [
+            Order.IN_PROGRESS,
+            Order.COMPLETED,
+            Order.CANCELLED
+        ]
+        if value not in valid_statuses:
+            raise serializers.ValidationError(
+                "Invalid status. Must be in_progress, completed or cancelled."
+            )
+        return value

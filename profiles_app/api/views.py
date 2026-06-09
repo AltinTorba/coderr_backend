@@ -1,8 +1,7 @@
 # Third-party imports
-from rest_framework import status
+from rest_framework.exceptions import NotFound
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 # Local imports
 from profiles_app.models import UserProfile
@@ -14,68 +13,38 @@ from .serializers import (
 )
 
 
-class ProfileView(APIView):
+class ProfileView(RetrieveUpdateAPIView):
     """View to retrieve and update a user profile."""
+    serializer_class = UserProfileSerializer
+    http_method_names = ['get', 'patch']
 
     def get_permissions(self):
-        """Set permissions based on request method."""
+        """Returns permissions based on request method."""
         if self.request.method == 'PATCH':
-            permission_classes = [IsAuthenticated, IsOwner]
-        else:
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+            return [IsAuthenticated(), IsOwner()]
+        return [IsAuthenticated()]
 
-    def _get_profile(self, pk):
-        """Retrieve profile by user_id or return None."""
+    def get_object(self):
+        """Returns profile by user_id or raises 404."""
         try:
-            return UserProfile.objects.get(user_id=pk)
+            obj = UserProfile.objects.get(user_id=self.kwargs['pk'])
         except UserProfile.DoesNotExist:
-            return None
-
-    def get(self, request, pk):
-        """Get profile details for a specific user."""
-        profile = self._get_profile(pk)
-        if not profile:
-            return Response(
-                {"error": "Profile not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        serializer = UserProfileSerializer(profile)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def patch(self, request, pk):
-        """Update profile details for a specific user."""
-        profile = self._get_profile(pk)
-        if not profile:
-            return Response(
-                {"error": "Profile not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        self.check_object_permissions(request, profile)
-        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            raise NotFound("Profile not found.")
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
-class BusinessProfileListView(APIView):
+class BusinessProfileListView(ListAPIView):
     """View to list all business profiles."""
+    serializer_class = BusinessProfileListSerializer
     permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        """Get list of all business profiles."""
-        profiles = UserProfile.objects.filter(user__type='business')
-        serializer = BusinessProfileListSerializer(profiles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    pagination_class = None
+    queryset = UserProfile.objects.filter(user__type='business')
 
 
-class CustomerProfileListView(APIView):
+class CustomerProfileListView(ListAPIView):
     """View to list all customer profiles."""
+    serializer_class = CustomerProfileListSerializer
     permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        """Get list of all customer profiles."""
-        profiles = UserProfile.objects.filter(user__type='customer')
-        serializer = CustomerProfileListSerializer(profiles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    pagination_class = None
+    queryset = UserProfile.objects.filter(user__type='customer')
