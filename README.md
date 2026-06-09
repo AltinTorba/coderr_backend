@@ -6,7 +6,7 @@ can offer services and customers can place orders.
 ## Tech Stack
 
 - Python 3.x
-- Django 5.x
+- Django 6.x
 - Django REST Framework
 - SQLite (development)
 
@@ -14,8 +14,8 @@ can offer services and customers can place orders.
 
 - `auth_app` - Authentication (register, login)
 - `profiles_app` - User profiles
-- `marketplace_app` - Offers, orders, reviews
-- `base_app` - Platform statistics
+- `marketplace_app` - Offers and orders
+- `base_app` - Reviews and platform statistics
 
 ## Installation
 

@@ -12,9 +12,10 @@ urlpatterns = [
 ]
 
 
-# Add Media URL only in development
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('auth_app.api.urls')),
+    path('api/', include('profiles_app.api.urls')),
+    path('api/', include('marketplace_app.api.urls')),
+    path('api/', include('base_app.api.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
