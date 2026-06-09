@@ -40,6 +40,7 @@ class OfferListCreateView(ListCreateAPIView):
     filter_backends = [OrderingFilter, SearchFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['updated_at', 'min_price']
+    ordering = ['-created_at']
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
