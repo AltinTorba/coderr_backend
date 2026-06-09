@@ -55,9 +55,9 @@ A freelance platform API where business users can offer services and customers c
 
 ## Environment Variables
 
-   SECRET_KEY=your-secret-key
-   DEBUG=True
-   ALLOWED_HOSTS=localhost,127.0.0.1
+SECRET_KEY=your-secret-key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
 
 ## User Types
 
@@ -143,5 +143,6 @@ Access the admin panel at `/admin/`
 
 ## Testing
 
-   python manage.py test
-   python manage.py test --settings=core.test_settings
+python manage.py test
+
+python manage.py test --settings=core.test_settings
