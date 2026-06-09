@@ -1,11 +1,12 @@
 # Coderr Backend API
 
-A freelance platform API where business users can offer services and customers can place orders.
+A freelance platform API where business users
+can offer services and customers can place orders.
 
 ## Tech Stack
 
 - Python 3.x
-- Django 5.x
+- Django 6.x
 - Django REST Framework
 - SQLite (development)
 
@@ -20,44 +21,56 @@ A freelance platform API where business users can offer services and customers c
 
 1. Clone the repository
 
-   git clone https://github.com/username/coderr-backend.git
-   cd coderr-backend
+```
+git clone https://github.com/username/coderr-backend.git
+cd coderr-backend
+```
 
 2. Create virtual environment
 
-   python -m venv venv
-   venv\Scripts\activate     # Windows
-   source venv/bin/activate  # Mac/Linux
+```
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Mac/Linux
+```
 
 3. Install dependencies
 
-   pip install -r requirements.txt
+```
+pip install -r requirements.txt
+```
 
 4. Create .env file
 
-   cp .env.example .env
+```
+cp .env.example .env
+```
 
 5. Run migrations
 
-   python manage.py migrate
+```
+python manage.py migrate
+```
 
 6. Create superuser
 
-   python manage.py createsuperuser
+```
+python manage.py createsuperuser
+```
 
 7. Start server
 
-   python manage.py runserver
-
-8. Run tests
-
-   python manage.py test
+```
+python manage.py runserver
+```
 
 ## Environment Variables
 
+```
 SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+```
 
 ## User Types
 
