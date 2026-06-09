@@ -20,57 +20,63 @@ can offer services and customers can place orders.
 ## Installation
 
 1. Clone the repository
-
-```
 git clone https://github.com/username/coderr-backend.git
 cd coderr-backend
-```
+
+text
+
 
 2. Create virtual environment
-
-```
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Mac/Linux
-```
+venv\Scripts\activate # Windows
+source venv/bin/activate # Mac/Linux
+
+text
+
 
 3. Install dependencies
-
-```
 pip install -r requirements.txt
-```
+
+text
+
 
 4. Create .env file
-
-```
 cp .env.example .env
-```
+
+text
+
 
 5. Run migrations
-
-```
 python manage.py migrate
-```
+
+text
+
 
 6. Create superuser
-
-```
 python manage.py createsuperuser
-```
+
+text
+
 
 7. Start server
-
-```
 python manage.py runserver
-```
+
+text
+
+
+8. Run tests
+python manage.py test
+
+text
+
 
 ## Environment Variables
-
-```
 SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
-```
+
+text
+
 
 ## User Types
 
@@ -81,45 +87,79 @@ ALLOWED_HOSTS=localhost,127.0.0.1
 
 ### Authentication
 
-- `POST /api/registration/` - Register new user
-- `POST /api/login/` - Login user
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/registration/` | Register new user | No |
+| POST | `/api/login/` | Login user | No |
 
 ### Profiles
 
-- `GET /api/profile/{pk}/` - Get user profile
-- `PATCH /api/profile/{pk}/` - Update own profile
-- `GET /api/profiles/business/` - List business profiles
-- `GET /api/profiles/customer/` - List customer profiles
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/profile/{pk}/` | Get user profile | Yes |
+| PATCH | `/api/profile/{pk}/` | Update own profile | Owner |
+| GET | `/api/profiles/business/` | List business profiles | Yes |
+| GET | `/api/profiles/customer/` | List customer profiles | Yes |
 
 ### Offers
 
-- `GET /api/offers/` - List all offers
-- `POST /api/offers/` - Create offer (business only)
-- `GET /api/offers/{id}/` - Get offer details
-- `PATCH /api/offers/{id}/` - Update offer (owner only)
-- `DELETE /api/offers/{id}/` - Delete offer (owner only)
-- `GET /api/offerdetails/{id}/` - Get offer detail
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/offers/` | List all offers | No |
+| POST | `/api/offers/` | Create offer | Business |
+| GET | `/api/offers/{id}/` | Get offer details | Yes |
+| PATCH | `/api/offers/{id}/` | Update offer | Owner |
+| DELETE | `/api/offers/{id}/` | Delete offer | Owner |
+| GET | `/api/offerdetails/{id}/` | Get offer detail | Yes |
+
+**Query Parameters for GET /api/offers/:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `creator_id` | integer | Filter by creator |
+| `min_price` | float | Minimum price filter |
+| `max_delivery_time` | integer | Maximum delivery time filter |
+| `ordering` | string | Sort by `updated_at` or `min_price` |
+| `search` | string | Search in `title` and `description` |
+| `page_size` | integer | Results per page |
 
 ### Orders
 
-- `GET /api/orders/` - List user orders
-- `POST /api/orders/` - Create order (customer only)
-- `PATCH /api/orders/{id}/` - Update order status (business only)
-- `DELETE /api/orders/{id}/` - Delete order (admin only)
-- `GET /api/order-count/{id}/` - Get active order count
-- `GET /api/completed-order-count/{id}/` - Get completed order count
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/orders/` | List user orders | Yes |
+| POST | `/api/orders/` | Create order | Customer |
+| PATCH | `/api/orders/{id}/` | Update status | Business |
+| DELETE | `/api/orders/{id}/` | Delete order | Admin |
+| GET | `/api/order-count/{id}/` | Active order count | Yes |
+| GET | `/api/completed-order-count/{id}/` | Completed count | Yes |
 
 ### Reviews
 
-- `GET /api/reviews/` - List reviews
-- `POST /api/reviews/` - Create review (customer only)
-- `PATCH /api/reviews/{id}/` - Update review (owner only)
-- `DELETE /api/reviews/{id}/` - Delete review (owner only)
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/reviews/` | List reviews | Yes |
+| POST | `/api/reviews/` | Create review | Customer |
+| PATCH | `/api/reviews/{id}/` | Update review | Reviewer |
+| DELETE | `/api/reviews/{id}/` | Delete review | Reviewer |
+
+**Query Parameters for GET /api/reviews/:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `business_user_id` | integer | Filter by business user |
+| `reviewer_id` | integer | Filter by reviewer |
+| `ordering` | string | Sort by `updated_at` or `rating` |
 
 ### General
 
-- `GET /api/base-info/` - Platform statistics
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/base-info/` | Platform statistics | No |
 
 ## Admin Panel
 
 Access the admin panel at `/admin/`
+
+
+
