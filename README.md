@@ -110,11 +110,14 @@ ALLOWED_HOSTS=localhost,127.0.0.1
 
 **Query Parameters for GET /api/offers/:**
 
-| Parameter     | Type    | Description                              |
-|---------------|---------|------------------------------------------|
-| creator_id    | integer | Filter by creator                        |
-| search        | string  | Search in title and description          |
-| ordering      | string  | Sort by `updated_at` or `min_price`      |
+| Parameter         | Type    | Description                          |
+|-------------------|---------|--------------------------------------|
+| creator_id        | integer | Filter by creator                    |
+| min_price         | float   | Filter by minimum price              |
+| max_delivery_time | integer | Filter by max delivery time          |
+| search            | string  | Search in title and description      |
+| ordering          | string  | Sort by `updated_at` or `min_price`  |
+| page_size         | integer | Results per page                     |
 
 ### Orders
 

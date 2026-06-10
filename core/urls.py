@@ -4,13 +4,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('auth_app.api.urls')),
-    path('api/', include('profiles_app.api.urls')),
-    path('api/', include('marketplace_app.api.urls')),
-]
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),

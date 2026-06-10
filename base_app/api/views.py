@@ -1,4 +1,5 @@
 # Third-party imports
+from rest_framework.permissions import AllowAny
 from django.db.models import Avg
 from rest_framework import status
 from rest_framework.filters import OrderingFilter
@@ -113,7 +114,7 @@ class ReviewRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 class BaseInfoView(APIView):
     """View for retrieving platform statistics."""
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request):
         """Returns aggregated platform statistics."""

@@ -44,8 +44,8 @@ class OfferDetail(models.Model):
         related_name='details'
     )
     title = models.CharField(max_length=255)
-    revisions = models.IntegerField()
-    delivery_time_in_days = models.IntegerField()
+    revisions = models.PositiveIntegerField()
+    delivery_time_in_days = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.JSONField(default=list)
     offer_type = models.CharField(
@@ -56,6 +56,7 @@ class OfferDetail(models.Model):
     class Meta:
         verbose_name = 'Offer Detail'
         verbose_name_plural = 'Offer Details'
+        unique_together = ('offer', 'offer_type')
         
     def __str__(self):
         return f'{self.offer.title} - {self.offer_type}'
@@ -85,8 +86,8 @@ class Order(models.Model):
         related_name='business_orders'
     )
     title = models.CharField(max_length=255)
-    revisions = models.IntegerField()
-    delivery_time_in_days = models.IntegerField()
+    revisions = models.PositiveIntegerField()
+    delivery_time_in_days = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.JSONField(default=list)
     offer_type = models.CharField(max_length=20)
