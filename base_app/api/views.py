@@ -1,10 +1,9 @@
 # Third-party imports
-from rest_framework.permissions import AllowAny
 from django.db.models import Avg
 from rest_framework import status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -79,12 +78,7 @@ class ReviewListCreateView(ListCreateAPIView):
 class ReviewRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """View for updating and deleting a specific review."""
     queryset = Review.objects.all()
-
-    def get_serializer_class(self):
-        """Returns serializer based on request method."""
-        if self.request.method == 'PATCH':
-            return ReviewUpdateSerializer
-        return ReviewSerializer
+    serializer_class = ReviewSerializer
 
     def get_permissions(self):
         """Returns permissions based on request method."""

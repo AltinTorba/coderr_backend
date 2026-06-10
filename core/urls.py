@@ -11,4 +11,7 @@ urlpatterns = [
     path('api/', include('profiles_app.api.urls')),
     path('api/', include('marketplace_app.api.urls')),
     path('api/', include('base_app.api.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
