@@ -1,7 +1,5 @@
-# Third-party imports
 from rest_framework import serializers
 
-# Local imports
 from base_app.models import Review
 
 
@@ -81,3 +79,4 @@ class BaseInfoSerializer(serializers.Serializer):
     average_rating = serializers.FloatField()
     business_profile_count = serializers.IntegerField()
     offer_count = serializers.IntegerField()
+

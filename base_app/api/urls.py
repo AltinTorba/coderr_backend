@@ -1,7 +1,5 @@
-# Third-party imports
 from django.urls import path
 
-# Local imports
 from .views import (
     BaseInfoView,
     ReviewListCreateView,
@@ -25,3 +23,4 @@ urlpatterns = [
         name='base-info'
     ),
 ]
+

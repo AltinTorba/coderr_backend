@@ -1,7 +1,5 @@
-# Third-party imports
 from django.db import models
 
-# Local
 from auth_app.models import CustomUser
 
 class UserProfile(models.Model):
@@ -29,3 +27,4 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.user.type}"
+

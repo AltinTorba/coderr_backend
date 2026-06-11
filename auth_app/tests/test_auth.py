@@ -1,8 +1,6 @@
-# Third-party imports
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-# Local imports
 from auth_app.models import CustomUser
 
 
@@ -100,3 +98,4 @@ class LoginUnhappyTests(LoginBaseTests):
         self.valid_data["password"] = "wrong123"
         response = self.client.post(self.url, self.valid_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+

@@ -1,6 +1,7 @@
 # Third-party imports
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
 # Local imports
@@ -17,6 +18,7 @@ class ProfileView(RetrieveUpdateAPIView):
     """View to retrieve and update a user profile."""
     serializer_class = UserProfileSerializer
     http_method_names = ['get', 'patch']
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_permissions(self):
         """Returns permissions based on request method."""

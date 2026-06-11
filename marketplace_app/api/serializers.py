@@ -1,9 +1,7 @@
-# Third-party imports
 from django.db.models import Min
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound
 
-# Local imports
 from marketplace_app.models import Offer, OfferDetail, Order
 
 
@@ -288,3 +286,4 @@ class OrderStatusSerializer(serializers.ModelSerializer):
                 "Invalid status. Must be in_progress, completed or cancelled."
             )
         return value
+

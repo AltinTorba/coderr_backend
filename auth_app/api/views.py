@@ -1,4 +1,3 @@
-# Third-party imports
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -6,7 +5,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# Local imports
 from .serializers import LoginSerializer, RegistrationSerializer
 
 
@@ -62,3 +60,4 @@ class LoginView(APIView):
             "email": user.email,
             "user_id": user.id
         }, status=status.HTTP_200_OK)
+

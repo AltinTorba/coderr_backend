@@ -1,9 +1,7 @@
-# Third-party imports
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-# Local imports
 from auth_app.models import CustomUser
 from profiles_app.models import UserProfile
 
@@ -248,3 +246,4 @@ class ProfileAutoCreateTests(APITestCase):
                 user__username='newuser'
             ).exists()
         )
+

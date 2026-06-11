@@ -1,4 +1,3 @@
-# Third-party
 from django.conf import settings
 from django.db import models
 
@@ -28,4 +27,5 @@ class Review(models.Model):
         unique_together = ('business_user', 'reviewer')
 
     def __str__(self):
-        return f"{self.reviewer.username} → {self.business_user.username}"
+        return f"{self.reviewer.username} â†’ {self.business_user.username}"
+

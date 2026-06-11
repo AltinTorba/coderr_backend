@@ -1,9 +1,7 @@
-# Third-party imports
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-# Local imports
 from auth_app.models import CustomUser
 from base_app.models import Review
 from marketplace_app.models import Offer
@@ -410,3 +408,4 @@ class BaseInfoHappyTests(ReviewBaseTests):
             response.data['business_profile_count'],
             expected
         )
+

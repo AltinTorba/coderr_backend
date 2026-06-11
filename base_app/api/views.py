@@ -1,4 +1,3 @@
-# Third-party imports
 from django.db.models import Avg
 from rest_framework import status
 from rest_framework.filters import OrderingFilter
@@ -7,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# Local imports
 from auth_app.models import CustomUser
 from base_app.models import Review
 from marketplace_app.models import Offer
@@ -132,3 +130,4 @@ class BaseInfoView(APIView):
 
         serializer = BaseInfoSerializer(data)
         return Response(serializer.data)
+

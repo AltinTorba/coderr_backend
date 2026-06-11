@@ -1,4 +1,3 @@
-# Third-party
 from django.db.models import Min, Q
 from rest_framework import status
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -15,7 +14,6 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# Local
 from auth_app.models import CustomUser
 from marketplace_app.models import Offer, OfferDetail, Order
 from .permissions import (
@@ -224,3 +222,4 @@ class CompletedOrderCountView(APIView):
             status=Order.COMPLETED
         ).count()
         return Response({'completed_order_count': count})
+

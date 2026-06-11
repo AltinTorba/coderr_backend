@@ -1,7 +1,5 @@
-# Third-party
 from django.contrib import admin
 
-# Local
 from .models import Offer, OfferDetail, Order
 
 
@@ -18,4 +16,10 @@ class OfferDetailAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     """Admin configuration for Order model."""
-    list_display = ['title', 'customer_user', 'status']
+    llist_display = [
+        'id', 'title', 'customer_user', 'business_user',
+        'status', 'created_at'
+    ]
+    list_filter = ['status']
+    search_fields = ['title', 'customer_user__username']
+

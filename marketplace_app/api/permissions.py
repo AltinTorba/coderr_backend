@@ -1,4 +1,3 @@
-# Third-party
 from rest_framework import permissions
 
 
@@ -38,3 +37,4 @@ class IsBusinessOrderUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         """Check if the request user is the business user of the order."""
         return obj.business_user == request.user
+

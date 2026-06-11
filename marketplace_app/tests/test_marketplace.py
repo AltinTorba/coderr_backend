@@ -1,9 +1,7 @@
-# Third-party imports
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-# Local imports
 from auth_app.models import CustomUser
 from marketplace_app.models import Offer, OfferDetail, Order
 
@@ -94,11 +92,6 @@ class OfferBaseTests(APITestCase):
             ]
         }
 
-
-# ─────────────────────────────────────────────
-# OFFER LIST TESTS
-# ─────────────────────────────────────────────
-
 class OfferListHappyTests(OfferBaseTests):
     """Happy path tests for GET /api/offers/."""
 
@@ -171,11 +164,6 @@ class OfferListHappyTests(OfferBaseTests):
         detail = response.data['results'][0]['details'][0]
         self.assertIn('id', detail)
         self.assertIn('url', detail)
-
-
-# ─────────────────────────────────────────────
-# OFFER CREATE TESTS
-# ─────────────────────────────────────────────
 
 class OfferCreateHappyTests(OfferBaseTests):
     """Happy path tests for POST /api/offers/."""
@@ -260,10 +248,6 @@ class OfferCreateUnhappyTests(OfferBaseTests):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-# ─────────────────────────────────────────────
-# OFFER RETRIEVE TESTS
-# ─────────────────────────────────────────────
-
 class OfferRetrieveHappyTests(OfferBaseTests):
     """Happy path tests for GET /api/offers/{id}/."""
 
@@ -305,10 +289,6 @@ class OfferRetrieveUnhappyTests(OfferBaseTests):
         response = self.client.get(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
-# ─────────────────────────────────────────────
-# OFFER UPDATE TESTS
-# ─────────────────────────────────────────────
 
 class OfferUpdateHappyTests(OfferBaseTests):
     """Happy path tests for PATCH /api/offers/{id}/."""
@@ -397,9 +377,6 @@ class OfferUpdateUnhappyTests(OfferBaseTests):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-# ─────────────────────────────────────────────
-# OFFER DELETE TESTS
-# ─────────────────────────────────────────────
 
 class OfferDeleteHappyTests(OfferBaseTests):
     """Happy path tests for DELETE /api/offers/{id}/."""
@@ -440,10 +417,6 @@ class OfferDeleteUnhappyTests(OfferBaseTests):
         response = self.client.delete(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
-# ─────────────────────────────────────────────
-# OFFER DETAIL RETRIEVE TESTS
-# ─────────────────────────────────────────────
 
 class OfferDetailRetrieveHappyTests(OfferBaseTests):
     """Happy path tests for GET /api/offerdetails/{id}/."""
@@ -495,10 +468,6 @@ class OfferDetailRetrieveUnhappyTests(OfferBaseTests):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-# ─────────────────────────────────────────────
-# ORDER BASE
-# ─────────────────────────────────────────────
-
 class OrderBaseTests(APITestCase):
     """Base setup for order tests."""
 
@@ -549,10 +518,6 @@ class OrderBaseTests(APITestCase):
         self.detail_url = f'/api/orders/{self.order.id}/'
 
 
-# ─────────────────────────────────────────────
-# ORDER LIST TESTS
-# ─────────────────────────────────────────────
-
 class OrderListHappyTests(OrderBaseTests):
     """Happy path tests for GET /api/orders/."""
 
@@ -597,10 +562,6 @@ class OrderListUnhappyTests(OrderBaseTests):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
-# ─────────────────────────────────────────────
-# ORDER CREATE TESTS
-# ─────────────────────────────────────────────
 
 class OrderCreateHappyTests(OrderBaseTests):
     """Happy path tests for POST /api/orders/."""
@@ -688,10 +649,6 @@ class OrderCreateUnhappyTests(OrderBaseTests):
         response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
-# ─────────────────────────────────────────────
-# ORDER UPDATE TESTS
-# ─────────────────────────────────────────────
 
 class OrderUpdateHappyTests(OrderBaseTests):
     """Happy path tests for PATCH /api/orders/{id}/."""
@@ -788,10 +745,6 @@ class OrderUpdateUnhappyTests(OrderBaseTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-# ─────────────────────────────────────────────
-# ORDER DELETE TESTS
-# ─────────────────────────────────────────────
-
 class OrderDeleteHappyTests(OrderBaseTests):
     """Happy path tests for DELETE /api/orders/{id}/."""
 
@@ -849,10 +802,6 @@ class OrderDeleteUnhappyTests(OrderBaseTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-# ─────────────────────────────────────────────
-# ORDER COUNT TESTS
-# ─────────────────────────────────────────────
-
 class OrderCountHappyTests(OrderBaseTests):
     """Happy path tests for GET /api/order-count/{business_user_id}/."""
 
@@ -886,10 +835,6 @@ class OrderCountUnhappyTests(OrderBaseTests):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-# ─────────────────────────────────────────────
-# COMPLETED ORDER COUNT TESTS
-# ─────────────────────────────────────────────
-
 class CompletedOrderCountHappyTests(OrderBaseTests):
     """Happy path tests for GET /api/completed-order-count/{id}/."""
 
@@ -921,7 +866,6 @@ class CompletedOrderCountHappyTests(OrderBaseTests):
         response = self.client.get(
             f'/api/completed-order-count/{self.business_user.id}/'
         )
-        # Kemi 1 in_progress dhe 1 completed - duhet të kthejë vetëm 1
         self.assertEqual(response.data['completed_order_count'], 1)
 
 
@@ -986,3 +930,4 @@ class OrderCountNotFoundTests(OrderBaseTests):
         """Test completed-order-count returns 404 for non-existent user."""
         response = self.client.get('/api/completed-order-count/99999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+

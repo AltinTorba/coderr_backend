@@ -23,3 +23,4 @@ class Migration(migrations.Migration):
             options={'ordering': ['-created_at'], 'verbose_name': 'Order', 'verbose_name_plural': 'Orders'},
         ),
     ]
+

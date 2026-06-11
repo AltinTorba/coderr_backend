@@ -1,7 +1,5 @@
-# Third-party imports
 from django.urls import path
 
-# Local imports
 from .views import (
     BusinessProfileListView,
     CustomerProfileListView,
@@ -13,3 +11,4 @@ urlpatterns = [
     path('profiles/business/', BusinessProfileListView.as_view(), name='business-list'),
     path('profiles/customer/', CustomerProfileListView.as_view(), name='customer-list'),
 ]
+

@@ -1,7 +1,5 @@
-# Third-party imports
 from rest_framework import serializers
 
-# Local
 from auth_app.models import CustomUser
 from profiles_app.models import UserProfile
 
@@ -34,3 +32,4 @@ class LoginSerializer(serializers.Serializer):
     """Serializer for user login."""
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
+

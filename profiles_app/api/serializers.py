@@ -1,7 +1,5 @@
-# Third-party imports
 from rest_framework import serializers
 
-# Local imports
 from profiles_app.models import UserProfile
 
 
@@ -73,3 +71,4 @@ class CustomerProfileListSerializer(serializers.ModelSerializer):
             'file',
             'type'
         ]
+

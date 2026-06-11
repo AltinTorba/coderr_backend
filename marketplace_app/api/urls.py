@@ -1,7 +1,5 @@
-# Third-party
 from django.urls import path
 
-# Local
 from .views import (
     CompletedOrderCountView,
     OfferDetailRetrieveView,
@@ -49,3 +47,4 @@ urlpatterns = [
         name='completed-order-count'
     ),
 ]
+
