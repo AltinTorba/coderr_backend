@@ -5,6 +5,13 @@ __pycache__/
 *.pyo
 *.pyd
 
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+.coverage
+coverage.xml
+
 # Django
 db.sqlite3
 
