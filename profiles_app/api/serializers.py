@@ -6,11 +6,20 @@ from profiles_app.models import UserProfile
 class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for full profile details (GET, PATCH)."""
     username = serializers.CharField(source='user.username', read_only=True)
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    last_name = serializers.CharField(source='user.last_name', read_only=True)
-    email = serializers.CharField(source='user.email', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', required=False)
+    last_name = serializers.CharField(source='user.last_name', required=False)
+    email = serializers.CharField(source='user.email', required=False)
     type = serializers.CharField(source='user.type', read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    def update(self, instance, validated_data):
+        """Updates profile and nested user fields."""
+        user_data = validated_data.pop('user', {})
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save()
+        return super().update(instance, validated_data)
 
     class Meta:
         model = UserProfile
