@@ -87,6 +87,13 @@ class OfferRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     queryset = Offer.objects.all()
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        """Returns annotated queryset."""
+        return Offer.objects.annotate(
+            min_price=Min('details__price'),
+            min_delivery_time=Min('details__delivery_time_in_days')
+        ).prefetch_related('details')
+
     def get_serializer_class(self):
         """Returns serializer based on request method."""
         if self.request.method == 'GET':

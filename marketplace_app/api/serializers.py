@@ -28,6 +28,7 @@ class OfferDetailUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfferDetail
         fields = [
+            'id',
             'title',
             'revisions',
             'delivery_time_in_days',
@@ -130,7 +131,26 @@ class OfferSerializer(serializers.ModelSerializer):
         instance = self._update_offer_fields(instance, validated_data)
         if details_data:
             self._update_details(instance, details_data)
+        instance.refresh_from_db()
         return instance
+
+    def _update_details(self, instance, details_data):
+        """Updates offer details by offer_type."""
+        valid_types = ['basic', 'standard', 'premium']
+        for detail in details_data:
+            offer_type = detail.get('offer_type')
+            if not offer_type:
+                raise serializers.ValidationError(
+                    {"offer_type": "offer_type is required for each detail."}
+                )
+            if offer_type not in valid_types:
+                raise serializers.ValidationError(
+                    {"offer_type": f"Invalid offer_type. Must be one of: {valid_types}"}
+                )
+            OfferDetail.objects.filter(
+                offer=instance,
+                offer_type=offer_type
+            ).update(**detail)
 
     def _update_offer_fields(self, instance, validated_data):
         """Updates the main offer fields."""
@@ -138,15 +158,6 @@ class OfferSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
-
-    def _update_details(self, instance, details_data):
-        """Updates offer details by offer_type."""
-        for detail in details_data:
-            offer_type = detail.get('offer_type')
-            OfferDetail.objects.filter(
-                offer=instance,
-                offer_type=offer_type
-            ).update(**detail)
 
 
 class OfferListSerializer(OfferMinValuesMixin, serializers.ModelSerializer):
