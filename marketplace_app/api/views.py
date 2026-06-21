@@ -1,11 +1,12 @@
 from django.db.models import Min, Q
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveAPIView,
     RetrieveUpdateDestroyAPIView
 )
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import (
     IsAdminUser,
     IsAuthenticated,
@@ -33,8 +34,16 @@ from .serializers import (
 )
 
 
+class OfferPagination(PageNumberPagination):
+    """Custom pagination allowing page_size from query params."""
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    
+
 class OfferListCreateView(ListCreateAPIView):
     """View for listing and creating offers."""
+    pagination_class = OfferPagination
     filter_backends = [OrderingFilter, SearchFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['updated_at', 'min_price']
@@ -51,18 +60,30 @@ class OfferListCreateView(ListCreateAPIView):
         ).prefetch_related(
             'details'
         )
-
+ 
         creator_id = self.request.query_params.get('creator_id')
         min_price = self.request.query_params.get('min_price')
         max_delivery_time = self.request.query_params.get('max_delivery_time')
-
+ 
         if creator_id:
             queryset = queryset.filter(user=creator_id)
         if min_price:
-            queryset = queryset.filter(min_price__gte=min_price)
+            try:
+                queryset = queryset.filter(min_price__gte=float(min_price))
+            except ValueError:
+                raise serializers.ValidationError(
+                    {"min_price": "Must be a valid number."}
+                )
         if max_delivery_time:
-            queryset = queryset.filter(min_delivery_time__lte=max_delivery_time)
-
+            try:
+                queryset = queryset.filter(
+                    min_delivery_time__lte=int(max_delivery_time)
+                )
+            except ValueError:
+                raise serializers.ValidationError(
+                    {"max_delivery_time": "Must be a valid integer."}
+                )
+ 
         return queryset
 
     def get_serializer_class(self):
