@@ -128,3 +128,8 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Importo cilësimet specifike të serverit (nëse ekzistojnë)
+try:
+    from .settings_local import *
+except ImportError:
+    pass
