@@ -123,6 +123,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
     'http://localhost:4200',
     'http://127.0.0.1:4200',
+    'https://altintorba-coderr.duckdns.org',
 ]
 
 CORS_ALLOW_CREDENTIALS = True

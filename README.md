@@ -162,3 +162,5 @@ Access the admin panel at `/admin/`
 python manage.py test
 
 python manage.py test --settings=core.test_settings
+
+# Test automatic deployment - 04.07.2026
