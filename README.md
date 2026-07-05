@@ -3,6 +3,15 @@
 A freelance platform API where business users
 can offer services and customers can place orders.
 
+# Coderr Backend API
+
+A freelance platform API where business users
+can offer services and customers can place orders.
+
+## 🌐 Live Demo
+
+**Live:** [altintorba-coderr.duckdns.org](https://altintorba-coderr.duckdns.org)
+
 ## Tech Stack
 
 - Python 3.x
@@ -162,5 +171,3 @@ Access the admin panel at `/admin/`
 python manage.py test
 
 python manage.py test --settings=core.test_settings
-
-# Test automatic deployment - 04.07.2026
