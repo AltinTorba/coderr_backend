@@ -43,3 +43,6 @@ Thumbs.db
 
 # 
 settings_local.py
+# Backup skedaresh te databazes (krijohen automatikisht nga cron ne prodhim)
+db_backup_*.sqlite3
+db_manual_backup*.sqlite3
