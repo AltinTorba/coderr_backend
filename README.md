@@ -8,10 +8,6 @@ can offer services and customers can place orders.
 A freelance platform API where business users
 can offer services and customers can place orders.
 
-## 🌐 Live Demo
-
-**Live:** [altintorba-coderr.duckdns.org](https://altintorba-coderr.duckdns.org)
-
 ## Tech Stack
 
 - Python 3.x
